@@ -2,4 +2,5 @@
 version = 1
 
 [update]
+always = "true"
 autoupdate_label = "autoupdate"
