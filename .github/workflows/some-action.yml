@@ -19,13 +19,8 @@ jobs:
         if: ${{ github.env.LABEL_IS_MISSING && github.env.NOT_MAIN_BRANCH }}
         run: |
           echo "E2E tests label not present. Skipping job."
-          echo $FAIL_AND_SKIP_TEST
+          echo $LABEL_IS_MISSING $NOT_MAIN_BRANCH
           echo "::error:: run-e2e-tests label not present. This job is required for merging PRs."
           exit 1
-
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20.10.0"
-      - run: bun --version
+      - name: Actual step
+        run: echo $LABEL_IS_MISSING $NOT_MAIN_BRANCH
