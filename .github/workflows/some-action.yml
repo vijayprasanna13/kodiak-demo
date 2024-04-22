@@ -16,7 +16,7 @@ jobs:
       LABEL_IS_MISSING: ${{ !contains(github.event.pull_request.labels.*.name, 'run-e2e-tests') }}
     steps:
       - name: Skip job and mark PR if label is not present
-        if: ${{ github.env.LABEL_IS_MISSING }}
+        if: github.env.LABEL_IS_MISSING
         run: |
           echo "E2E tests label not present. Skipping job."
           echo $LABEL_IS_MISSING $NOT_MAIN_BRANCH
