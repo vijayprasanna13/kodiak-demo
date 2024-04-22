@@ -15,12 +15,13 @@ jobs:
         EVENT_NAME: ${{ github.event_name }}
         ACTION: ${{ github.event.action }}
         MERGED: ${{ github.event.pull_request.merged }}
+        BRANCH: ${{ github.ref }}
     steps:
       - name: Skip job and mark PR if label is not present
         if: contains(github.event.pull_request.labels.*.name, 'run-e2e-tests') == false && !(github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true)
         run: |
           echo "E2E tests label not present. Skipping job."
-          echo "event name $EVENT_NAME, action $ACTION, merged $MERGED"
+          echo "event name $EVENT_NAME, action $ACTION, merged $MERGED, branch $BRANCH"
           echo "::error:: run-e2e-tests label not present. This job is required for merging PRs."
           exit 1
 
