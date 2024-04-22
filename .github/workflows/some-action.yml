@@ -12,13 +12,13 @@ jobs:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     env:
-        EVENT_NAME: ${{ github.event_name }}
-        ACTION: ${{ github.event.action }}
-        MERGED: ${{ github.event.pull_request.merged }}
-        BRANCH: ${{ github.ref }}
+      EVENT_NAME: ${{ github.event_name }}
+      ACTION: ${{ github.event.action }}
+      MERGED: ${{ github.event.pull_request.merged }}
+      BRANCH: ${{ github.ref }}
     steps:
       - name: Skip job and mark PR if label is not present
-        if: contains(github.event.pull_request.labels.*.name, 'run-e2e-tests') == false && !(github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true)
+        if: ${{contains(github.event.pull_request.labels.*.name, 'run-e2e-tests') == false && github.ref != 'refs/heads/main'}}
         run: |
           echo "E2E tests label not present. Skipping job."
           echo "event name $EVENT_NAME, action $ACTION, merged $MERGED, branch $BRANCH"
