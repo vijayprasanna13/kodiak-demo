@@ -1,15 +1,14 @@
-name: Dashboard PR-only Checks
+name: Security
+
 on:
   pull_request:
-    paths:
-      - '.github/workflows/dashboard-pr-only.yml'
-      - 'services/cloud/**'
+  push:
+    branches:
+      - main
 
 jobs:
   avoid-sensitive-data-in-html-attributes:
-    runs-on: ubuntu-20.04
-    env:
-      working-directory: ./services/cloud/app
+    runs-on: ubuntu-latest
     steps:
       - name: Assert no sensitive data in HTML attributes
         uses: actions/github-script@v6
@@ -28,4 +27,3 @@ jobs:
               }
             }
             core.setFailed("Please confirm that you've not added any sensitive information in any HTML attributes (except id, key, data-testid and value) by adding no-sensitive-info-in-html-attributes label. This is important to make sure we don't send sensitive information to our analytics provider (heap). Rerun this step after adding the tag.");
- 
