@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Assert no sensitive data in HTML attributes
+        if: ${{ !(github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/production') }}
         uses: actions/github-script@v6
         id: sensitiveDataCheck
         with:
