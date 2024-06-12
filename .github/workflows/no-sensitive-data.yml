@@ -1,0 +1,30 @@
+name: Security
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, opened, synchronize]
+  push:
+    branches:
+      - main
+
+jobs:
+  avoid-sensitive-data-in-html-attributes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assert no sensitive data in HTML attributes
+        uses: actions/github-script@v6
+        id: sensitiveDataCheck
+        with:
+          script: |
+            const labels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            for (const label of labels.data) {
+              if (label.name === 'no-sensitive-info-in-html-attributes') {
+                console.log("no-sensitive-info-in-html-attributes label found. Author has confirmed that there is no sensitive info in any of the changed HTML attributes.");
+                return;
+              }
+            }
+            core.setFailed("Please confirm that you've not added any sensitive information in any HTML attributes (except id, key, data-testid and value) by adding no-sensitive-info-in-html-attributes label. This is important to make sure we don't send sensitive information to our analytics provider (heap). Rerun this step after adding the tag.");
